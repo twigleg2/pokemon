@@ -9,17 +9,21 @@
 
 <body>
     <div id="app">
-        <span>Current Diffuculty: <button v-on:click="changeDifficulty">{{getDifficulty}}</button></span>
-        <button v-on:click="getRound">GO!</button>
-        <div v-if="ready">
-            <img v-if="sprite" v-bind:class="visible ? '' : 'silhouette' " v-bind:src="sprite">
-            <p>{{message}}</p>
-            <span v-for="choice in choices">
-                <button v-on:click="checkAnswer(choice)">{{choice.name}}</button>
-            </span>
+        <div class="center-column vh100">
+            <span class="score">Score: {{score.correct}}/{{score.total}}</span>
+            <div>
+                <span>Current Diffuculty: <button v-on:click="changeDifficulty">{{getDifficulty}}</button></span>
+                <button v-on:click="getRound">GO!</button>
+            </div>
+            <div class="center-column question" v-if="ready">
+                <img v-if="sprite" v-bind:class="visible ? '' : 'silhouette' " v-bind:src="sprite">
+                <p>{{message}}</p>
+                <span>
+                    <button v-for="choice in choices" v-on:click="checkAnswer(choice)">{{choice.name}}</button>
+                </span>
+            </div>
+            <p class="loading" v-else>{{message}}</p>
         </div>
-        <p v-else>{{message}}</p>
-
         <img class="bg" src="images/lucario.png">
     </div>
 

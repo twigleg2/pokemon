@@ -9,11 +9,17 @@ var app = new Vue({
         difficulties: ['easy', 'hard'],
         difficulty: 0,
         visible: true,
-        hasAnswered: false,
+        hasAnswered: true,
+        score: { correct: 0, total: 0 },
     },
     created: function () {
         //get the national pokedex size
-        this.GET("pokedex/1", this.setPokedexSize);
+        try {
+            this.GET("pokedex/1", this.setPokedexSize);
+        }
+        catch (error) {
+            this.message = "Failed to load.  Try refreshing the page."
+        }
     },
     computed: {
         getDifficulty() {
@@ -29,16 +35,18 @@ var app = new Vue({
                 let json = response.data;
                 console.log(json);
                 if (exec) {
-                    console.log("executing");
                     exec(json);
                 }
                 return new Promise((resolve, reject) => resolve());
             }
             catch (error) {
                 console.log(error);
+                return new Promise((resolve, reject) => reject());
             }
         },
         async getRound() {
+            if (!this.hasAnswered)
+                return
             let apiParam = "pokemon/";
             this.ready = false;
             this.message = 'Loading...';
@@ -47,15 +55,21 @@ var app = new Vue({
             this.hasAnswered = false;
             this.setVisibility();
 
-            await Promise.all([
-                this.GET(apiParam + this.getRandomPokedexNumber() + '/', this.getRightAnswer), // one right answer
-                this.GET(apiParam + this.getRandomPokedexNumber() + '/', this.getWrongAnswer), // three wrong answers
-                this.GET(apiParam + this.getRandomPokedexNumber() + '/', this.getWrongAnswer), // TODO: currently possible to get duplicates in the choices array
-                this.GET(apiParam + this.getRandomPokedexNumber() + '/', this.getWrongAnswer),
-            ]);
-            this.shuffle();
-            this.ready = true;
-            this.message = "Who's that Pokémon?!"
+            try {
+                await Promise.all([
+                    this.GET(apiParam + this.getRandomPokedexNumber() + '/', this.getRightAnswer), // one right answer
+                    this.GET(apiParam + this.getRandomPokedexNumber() + '/', this.getWrongAnswer), // three wrong answers
+                    this.GET(apiParam + this.getRandomPokedexNumber() + '/', this.getWrongAnswer), // TODO: currently possible to get duplicates in the choices array
+                    this.GET(apiParam + this.getRandomPokedexNumber() + '/', this.getWrongAnswer),
+                ]);
+                this.shuffle();
+                this.ready = true;
+                this.message = "Who's that Pokémon?!"
+            }
+            catch (err) {
+                this.message = "Failed to load."
+                this.hasAnswered = true;
+            }
 
         },
         checkAnswer(answer) {
@@ -63,8 +77,10 @@ var app = new Vue({
                 return;
             this.hasAnswered = true;
             this.visible = true;
+            this.score.total++;
             if (answer.correct) {
                 this.message = "Correct!";
+                this.score.correct++;
             }
             else {
                 correctAnswer = this.choices.find(item => { return item.correct })
