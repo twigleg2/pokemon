@@ -1,0 +1,17 @@
+
+
+body {
+    /* background-image: url(images/pikachu.jpg); */
+}
+
+.selected {
+    border: 3px;
+}
+
+.easy {
+
+}
+
+.hard {
+    filter: contrast(0%);
+}
