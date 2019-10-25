@@ -9,15 +9,16 @@
 
 <body>
     <div id="app">
-        <button v-on:click="changeDifficulty">{{getDifficulty}}</button>
+        <span>Current Diffuculty: <button v-on:click="changeDifficulty">{{getDifficulty}}</button></span>
         <button v-on:click="getRound">GO!</button>
         <div v-if="ready">
             <img v-if="sprite" v-bind:class="visible ? '' : 'silhouette' " v-bind:src="sprite">
+            <p>{{message}}</p>
             <span v-for="choice in choices">
                 <button v-on:click="checkAnswer(choice)">{{choice.name}}</button>
             </span>
-            <p>{{message}}</p>
         </div>
+        <p v-else>{{message}}</p>
 
         <img class="bg" src="images/lucario.png">
     </div>

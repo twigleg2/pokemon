@@ -1,16 +1,14 @@
 
-
-/* body {
-    background-image: url(images/lucario.png);
-    background-size: cover;
-} */
+#app {
+    margin: 1em;
+}
 
 .selected {
     border: 3px;
 }
 
 .silhouette {
-    filter: contrast(0%);
+    filter: brightness(0%);
 }
 
 img.bg {

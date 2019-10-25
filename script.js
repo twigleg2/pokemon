@@ -9,6 +9,7 @@ var app = new Vue({
         difficulties: ['easy', 'hard'],
         difficulty: 0,
         visible: true,
+        hasAnswered: false,
     },
     created: function () {
         //get the national pokedex size
@@ -40,9 +41,10 @@ var app = new Vue({
         async getRound() {
             let apiParam = "pokemon/";
             this.ready = false;
-            this.message = '';
+            this.message = 'Loading...';
             this.sprite = '';
             this.choices = [];
+            this.hasAnswered = false;
             this.setVisibility();
 
             await Promise.all([
@@ -53,16 +55,20 @@ var app = new Vue({
             ]);
             this.shuffle();
             this.ready = true;
+            this.message = "Who's that Pokémon?!"
 
         },
         checkAnswer(answer) {
+            if (this.hasAnswered)
+                return;
+            this.hasAnswered = true;
             this.visible = true;
             if (answer.correct) {
-                this.message = "CORRECT!";
+                this.message = "Correct!";
             }
             else {
                 correctAnswer = this.choices.find(item => { return item.correct })
-                this.message = "INCORRECT! The correct answer is " + correctAnswer.name;
+                this.message = "Incorrect! The correct answer is " + correctAnswer.name;
             }
         },
         shuffle() {
