@@ -8,6 +8,7 @@ var app = new Vue({
         pokedexSize: 0,
         difficulties: ['easy', 'hard'],
         difficulty: 0,
+        visible: true,
     },
     created: function () {
         //get the national pokedex size
@@ -17,10 +18,6 @@ var app = new Vue({
         getDifficulty() {
             return this.difficulties[this.difficulty];
         },
-        changeDifficulty() {
-
-            this.difficulty = this.difficulty++ % this.difficulties.length;
-        }
     },
     methods: {
         async GET(apiParam, exec) {
@@ -46,7 +43,7 @@ var app = new Vue({
             this.message = '';
             this.sprite = '';
             this.choices = [];
-
+            this.setVisibility();
 
             await Promise.all([
                 this.GET(apiParam + this.getRandomPokedexNumber() + '/', this.getRightAnswer), // one right answer
@@ -59,6 +56,7 @@ var app = new Vue({
 
         },
         checkAnswer(answer) {
+            this.visible = true;
             if (answer.correct) {
                 this.message = "CORRECT!";
             }
@@ -88,7 +86,13 @@ var app = new Vue({
         },
         setPokedexSize(json) {
             this.pokedexSize = json.pokemon_entries.length;
-            console.log(this.pokedexSize);
         },
+        changeDifficulty() {
+            this.difficulty = (this.difficulty + 1) % this.difficulties.length;
+        },
+        setVisibility() {
+            if (this.difficulty === this.difficulties.length - 1)
+                this.visible = false;
+        }
     },
 });

@@ -12,13 +12,14 @@
         <button v-on:click="changeDifficulty">{{getDifficulty}}</button>
         <button v-on:click="getRound">GO!</button>
         <div v-if="ready">
-            <img v-if="sprite" v-bind:class="difficulty" v-bind:src="sprite">
+            <img v-if="sprite" v-bind:class="visible ? '' : 'silhouette' " v-bind:src="sprite">
             <span v-for="choice in choices">
                 <button v-on:click="checkAnswer(choice)">{{choice.name}}</button>
             </span>
             <p>{{message}}</p>
         </div>
 
+        <img class="bg" src="images/lucario.png">
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"
