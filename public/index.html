@@ -9,11 +9,18 @@
 
 <body>
     <div id="app">
+        <div class="highscores">
+            <p>Highscores since: {{highscores.since}}</p>
+            <ul>
+                <!-- TODO!!! -->
+                <li v-for="score in highscores.scores">{{}}</li>
+            </ul>
+        </div>
         <div class="center-column vh100">
-            <span class="score">Score: {{score.correct}}/{{score.total}}</span>
+            <span class="score">Score: {{score}}</span>
             <div>
                 <span>Current Diffuculty: <button v-on:click="changeDifficulty">{{getDifficulty}}</button></span>
-                <button v-on:click="getRound">GO!</button>
+                <button v-on:click="createRound">GO!</button>
             </div>
             <div class="center-column question" v-if="questionReady">
                 <img v-bind:class="visible ? '' : 'silhouette' " v-bind:src="sprite" v-on:load="loaded">
