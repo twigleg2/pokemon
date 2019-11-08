@@ -1,4 +1,3 @@
-
 #app {
     margin: 1em;
 }
@@ -8,10 +7,6 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-}
-
-.vh100 {
-    height: 100vh;
 }
 
 .selected {
@@ -36,17 +31,17 @@ img.bg {
     top: 0;
     left: 0;
 
-    z-index:-5;
-  }
+    z-index: -5;
+}
 
-  .score {
-      margin-bottom: 5px;
-  }
+.score {
+    margin-bottom: 5px;
+}
 
-  .question {
-      min-height: 50px;
-  }
+.question {
+    min-height: 50px;
+}
 
-  .loading {
-      min-height: 50px;
-  }
+.loading {
+    min-height: 50px;
+}

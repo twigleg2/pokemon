@@ -13,10 +13,10 @@
             <p>Highscores since: {{highscores.since}}</p>
             <ul>
                 <!-- TODO!!! -->
-                <li v-for="score in highscores.scores">{{}}</li>
+                <li v-for="difficulty in difficulties">{{difficulty}}: {{highscores.scores[difficulty]}}</li>
             </ul>
         </div>
-        <div class="center-column vh100">
+        <div class="center-column">
             <span class="score">Score: {{score}}</span>
             <div>
                 <span>Current Diffuculty: <button v-on:click="changeDifficulty">{{getDifficulty}}</button></span>

@@ -12,17 +12,19 @@ var app = new Vue({
         visible: true,
         hasAnswered: true,
         score: 0,
-        highscores: {},
+        highscores: {
+            since: null,
+            scores: {}
+        },
     },
     created: function () {
         //get the national pokedex size
         try {
             this.getPokemon("pokedex/1", this.setPokedexSize);
-        }
-        catch (error) {
+        } catch (error) {
             this.message = "Failed to load.  Try refreshing the page."
         }
-        this.getHighscore();
+        this.getHighscores();
     },
     computed: {
         getDifficulty() {
@@ -46,30 +48,31 @@ var app = new Vue({
                     exec(json);
                 }
                 return new Promise((resolve, reject) => resolve());
-            }
-            catch (error) {
+            } catch (error) {
                 console.log(error);
                 return new Promise((resolve, reject) => reject());
             }
         },
-        async getHighscore() {
-            var url = "http://pokemon.gavenfinch.site/highscore";
+        async getHighscores() {
+            var url = "http://pokemon.gavenfinch.site/highscores";
             try {
                 let response = await axios.get(url);
                 this.highscores = response.data;
                 console.log(this.highscores);
-            }
-            catch (error) {
+            } catch (error) {
                 console.log(error);
             }
         },
         async submitScore() {
-            var url = "http://pokemon.gavenfinch.site/highscore";
+            var url = "http://pokemon.gavenfinch.site/highscores";
             try {
-                let response = await axios.put(url, { score: this.score, difficulty: this.difficulties[difficulty] });
+                let response = await axios.put(url, {
+                    score: this.score,
+                    difficulty: this.difficulties[this.difficulty]
+                });
                 this.highscores = response.data;
-            }
-            catch (error) {
+                console.log("submit score response", response.data);
+            } catch (error) {
                 console.log(error);
             }
 
@@ -96,8 +99,7 @@ var app = new Vue({
                 this.shuffle();
                 this.questionReady = true;
                 this.message = "Who's that Pokémon?!"
-            }
-            catch (err) {
+            } catch (err) {
                 this.message = "Failed to load."
                 this.hasAnswered = true;
             }
@@ -111,10 +113,11 @@ var app = new Vue({
             if (answer.correct) {
                 this.message = "Correct!";
                 this.score++;
-            }
-            else {
+            } else {
                 this.submitScore();
-                correctAnswer = this.choices.find(item => { return item.correct })
+                correctAnswer = this.choices.find(item => {
+                    return item.correct
+                })
                 this.message = "Incorrect! The correct answer is " + correctAnswer.name;
                 this.score = 0;
             }
@@ -132,10 +135,16 @@ var app = new Vue({
         },
         getRightAnswer(json) {
             this.sprite = json.sprites.front_default;
-            this.choices.push({ name: json.name, correct: true });
+            this.choices.push({
+                name: json.name,
+                correct: true
+            });
         },
         getWrongAnswer(json) {
-            this.choices.push({ name: json.name, correct: false });
+            this.choices.push({
+                name: json.name,
+                correct: false
+            });
         },
         setPokedexSize(json) {
             this.pokedexSize = json.pokemon_entries.length;

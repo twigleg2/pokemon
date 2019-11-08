@@ -4,20 +4,25 @@ const moment = require('moment');
 
 const app = express();
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 
 app.use(express.static('public'));
 
 let highscores = {
     since: moment().format("MMM Do YYYY"),
-    scores: { easy: 0, hard: 0 },
+    scores: {
+        easy: 0,
+        hard: 0
+    },
 };
 
-app.get('/highscore', (req, res) => {
+app.get('/highscores', (req, res) => {
     res.send(highscores);
 });
 
-app.put('/highscore', (req, res) => {
+app.put('/highscores', (req, res) => {
     if (!req.body.score || !req.body.difficulty) {
         res.send(highscores);
         return;
