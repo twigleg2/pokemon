@@ -15,8 +15,8 @@
                 <span>Current Diffuculty: <button v-on:click="changeDifficulty">{{getDifficulty}}</button></span>
                 <button v-on:click="getRound">GO!</button>
             </div>
-            <div class="center-column question" v-if="ready">
-                <img v-if="sprite" v-bind:class="visible ? '' : 'silhouette' " v-bind:src="sprite">
+            <div class="center-column question" v-if="questionReady">
+                <img v-bind:class="visible ? '' : 'silhouette' " v-bind:src="sprite" v-on:load="loaded">
                 <p>{{message}}</p>
                 <span>
                     <button v-for="choice in choices" v-on:click="checkAnswer(choice)">{{choice.name}}</button>
@@ -27,9 +27,6 @@
         <img class="bg" src="images/lucario.png">
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"
-        integrity="sha256-mpnrJ5DpEZZkwkE1ZgkEQQJW/46CSEh/STrZKOB/qoM=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.2/dist/vue.js"></script>
     <script src="script.js"></script>
 </body>
 

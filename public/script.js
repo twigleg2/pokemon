@@ -4,7 +4,8 @@ var app = new Vue({
         sprite: '',
         choices: [],
         message: '',
-        ready: false,
+        questionReady: false,
+        imageReady: false,
         pokedexSize: 0,
         difficulties: ['easy', 'hard'],
         difficulty: 0,
@@ -25,6 +26,11 @@ var app = new Vue({
         getDifficulty() {
             return this.difficulties[this.difficulty];
         },
+        show() {
+            let qr = !!this.questionReady;
+            let ir = !!this.imageReady;
+            return qr && ir;
+        }
     },
     methods: {
         async GET(apiParam, exec) {
@@ -48,7 +54,8 @@ var app = new Vue({
             if (!this.hasAnswered)
                 return
             let apiParam = "pokemon/";
-            this.ready = false;
+            this.questionReady = false;
+            this.imageReady = false;
             this.message = 'Loading...';
             this.sprite = '';
             this.choices = [];
@@ -63,7 +70,7 @@ var app = new Vue({
                     this.GET(apiParam + this.getRandomPokedexNumber() + '/', this.getWrongAnswer),
                 ]);
                 this.shuffle();
-                this.ready = true;
+                this.questionReady = true;
                 this.message = "Who's that Pokémon?!"
             }
             catch (err) {
@@ -94,7 +101,6 @@ var app = new Vue({
                 this.choices[i] = this.choices[j]
                 this.choices[j] = temp
             }
-            console.log(this.choices);
         },
         getRandomPokedexNumber() {
             return Math.floor(Math.random() * this.pokedexSize);
@@ -115,6 +121,10 @@ var app = new Vue({
         setVisibility() {
             if (this.difficulty === this.difficulties.length - 1)
                 this.visible = false;
+        },
+        loaded() {
+            this.imageReady = true;
+            console.log("loaded");
         }
     },
 });
