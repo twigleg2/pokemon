@@ -9,16 +9,24 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('public'));
 
 let highscore = {
-    since: moment.calendarFormat("MMM Do YYYY"),
-    score = 0,
+    since: moment().format("MMM Do YYYY"),
+    score: 0,
 };
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
+app.get('/highscore', (req, res) => {
+    res.send(highscore);
 });
 
-app.post('/', (req, res) => {
-    res.send('Here is the response to your POST, man!\n');
+app.put('/highscore', (req, res) => {
+    if (!req.body.score) {
+        res.send(highscore);
+        return;
+    }
+    let score = req.body.score;
+    if (highscore.score < score) {
+        highscore.score = score;
+    }
+    res.send(highscore);
 });
 
 app.listen(3130, () => console.log('Server listening on port 3130!'));
